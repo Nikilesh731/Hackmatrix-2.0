@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/consultation.dart';
 import '../models/doctor_profile.dart';
+import '../models/patient.dart';
 import '../services/auth_service.dart';
 import '../services/consultation_repository.dart';
 import '../widgets/soap_display_widget.dart';
@@ -17,6 +19,7 @@ class PostConsultationScreen extends StatefulWidget {
 class _PostConsultationScreenState extends State<PostConsultationScreen> {
   Consultation? _consultation;
   DoctorProfile? _doctorProfile;
+  Patient? _patient;
   bool _isLoading = true;
   String? _errorMessage;
 
@@ -39,10 +42,17 @@ class _PostConsultationScreenState extends State<PostConsultationScreen> {
       final doctorProfile = await AuthService.getCurrentDoctorProfile();
       final consultation = await ConsultationRepository.getConsultationById(consultationId);
 
+      // Load patient data
+      if (consultation?.patientId == null) {
+        throw Exception('Patient ID not found in consultation');
+      }
+      final patient = await _loadPatient(consultation!.patientId!);
+
       if (mounted) {
         setState(() {
           _doctorProfile = doctorProfile;
           _consultation = consultation;
+          _patient = patient;
           _isLoading = false;
         });
       }
@@ -54,6 +64,15 @@ class _PostConsultationScreenState extends State<PostConsultationScreen> {
         });
       }
     }
+  }
+
+  Future<Patient> _loadPatient(String patientId) async {
+    final response = await Supabase.instance.client
+        .from('patients')
+        .select()
+        .eq('id', patientId)
+        .single();
+    return Patient.fromJson(response);
   }
 
   @override
