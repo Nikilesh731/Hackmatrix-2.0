@@ -267,17 +267,6 @@ git push origin feature/your-feature-name
 
 This project is licensed under MIT License - see [LICENSE](LICENSE) file for details.
 
-## 👥 Team
-
-- **Nikilesh**: Lead Developer & AI/ML Engineer
-- **Project Role**: Full-stack development, clinical NLP, and healthcare domain expertise
-
-## 📞 Contact
-
-- **GitHub**: [@Nikilesh731](https://github.com/Nikilesh731)
-- **Email**: [Project Email]
-- **Demo**: [Live Demo Link]
-
 ---
 
 ## 🏆 Hackmatrix 2.0 Submission
