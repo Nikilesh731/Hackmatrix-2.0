@@ -20,11 +20,17 @@ void main() async {
     anonKey: AppConfig.supabaseAnonKey,
   );
 
+  print('Supabase initialized with URL: ${AppConfig.supabaseUrl}');
+
   // Set preferred orientations
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+
+  // Check current auth state before running app
+  final currentSession = Supabase.instance.client.auth.currentSession;
+  print('Current auth session: ${currentSession?.user?.email ?? "No user"}');
 
   runApp(const MyApp());
 }

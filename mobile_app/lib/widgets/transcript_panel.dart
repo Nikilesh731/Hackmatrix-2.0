@@ -21,6 +21,7 @@ class TranscriptPanel extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min, // Fix layout constraint issue
         children: [
           Text(
             'Live Transcription',
@@ -31,7 +32,7 @@ class TranscriptPanel extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          Expanded(
+          Flexible(  // Replace Expanded with Flexible to fix layout constraints
             child: Container(
               width: double.infinity,
               padding: const EdgeInsets.all(16),
