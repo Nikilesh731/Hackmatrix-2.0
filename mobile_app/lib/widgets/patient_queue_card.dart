@@ -158,10 +158,10 @@ class PatientQueueCard extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: onStartConsultation,
-                icon: const Icon(Icons.play_arrow_filled),
-                label: const Text('Start Consultation'),
+                icon: const Icon(Icons.play_arrow, size: 16),
+                label: const Text('Start'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue[700],
+                  backgroundColor: Colors.green[600],
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 12),
                 ),

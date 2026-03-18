@@ -6,6 +6,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'config/app_config.dart';
 import 'screens/auth_screen.dart';
 import 'screens/doctor_dashboard_screen.dart';
+import 'screens/consultation_screen.dart';
+import 'screens/post_consultation_screen.dart';
 import 'services/auth_service.dart';
 import 'services/supabase_service.dart';
 
@@ -64,10 +66,22 @@ class MyApp extends StatelessWidget {
               );
             },
           ),
+          GoRoute(
+            path: '/consultation',
+            builder: (context, state) {
+              return const ConsultationScreen();
+            },
+          ),
+          GoRoute(
+            path: '/post-consultation',
+            builder: (context, state) {
+              return const PostConsultationScreen();
+            },
+          ),
         ],
         redirect: (context, state) {
           final isAuthenticated = Supabase.instance.client.auth.currentSession != null;
-          final isAuthRoute = state.location == '/auth';
+          final isAuthRoute = state.uri.toString() == '/auth';
           
           if (!isAuthenticated && !isAuthRoute) {
             return '/auth';
