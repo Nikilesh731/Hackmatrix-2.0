@@ -444,4 +444,57 @@ class _ConsultationScreenState extends State<ConsultationScreen> {
       ),
     );
   }
+
+  Future<void> _completeConsultation() async {
+    try {
+      // Create consultation record
+      final consultationData = {
+        'doctor_id': _doctorProfile!.id,
+        'patient_id': _patient!.id,
+        'queue_item_id': _queueItem?.id,
+        'status': 'completed',
+        'final_transcript': _transcript,
+        'soap_subjective': _soapNotes?.subjective,
+        'soap_objective': _soapNotes?.objective,
+        'soap_assessment': _soapNotes?.assessment,
+        'soap_plan': _soapNotes?.plan,
+        'structured_extraction': _soapNotes?.toJson(),
+        'ended_at': DateTime.now().toIso8601String(),
+      };
+
+      final response = await Supabase.instance.client
+          .from('consultations')
+          .insert(consultationData)
+          .select('id')
+          .single();
+
+      // Update queue item status
+      if (_queueItem != null) {
+        await Supabase.instance.client
+            .from('patient_queue')
+            .update({'queue_status': 'completed'})
+            .eq('id', _queueItem!.id);
+      }
+
+      // Navigate to post-consultation screen
+      if (mounted) {
+        context.go('/post-consultation?consultationId=${response['id']}');
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to complete consultation: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  void _navigateToPostConsultation() async {
+    if (_soapNotes == null || _fhirBundle == null) return;
+
+    await _completeConsultation();
+  }
 }
