@@ -1,0 +1,134 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  consultations Consultation[]
+
+  @@map("users")
+}
+
+model Patient {
+  id          String    @id @default(cuid())
+  name        String
+  dateOfBirth DateTime?
+  gender      String?
+  contactInfo String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  consultations Consultation[]
+
+  @@map("patients")
+}
+
+model Consultation {
+  id        String    @id @default(cuid())
+  userId    String
+  patientId String
+  status    String    @default("not_started")
+  startTime DateTime?
+  endTime   DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  user            User             @relation(fields: [userId], references: [id])
+  patient         Patient          @relation(fields: [patientId], references: [id])
+  transcriptTurns TranscriptTurn[]
+  soapNote        SoapNote?
+  prescriptions   Prescription[]
+  referrals       Referral[]
+  fhirBundle      FhirBundle?
+
+  @@map("consultations")
+}
+
+model TranscriptTurn {
+  id             String   @id @default(cuid())
+  consultationId String
+  speaker        String // "doctor" or "patient"
+  text           String
+  timestamp      DateTime @default(now())
+  confidence     Float?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  consultation Consultation @relation(fields: [consultationId], references: [id])
+
+  @@map("transcript_turns")
+}
+
+model SoapNote {
+  id             String   @id @default(cuid())
+  consultationId String   @unique
+  subjective     String?
+  objective      String?
+  assessment     String?
+  plan           String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  consultation Consultation @relation(fields: [consultationId], references: [id])
+
+  @@map("soap_notes")
+}
+
+model Prescription {
+  id             String   @id @default(cuid())
+  consultationId String
+  medication     String
+  dosage         String
+  frequency      String
+  duration       String?
+  instructions   String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  consultation Consultation @relation(fields: [consultationId], references: [id])
+
+  @@map("prescriptions")
+}
+
+model Referral {
+  id             String   @id @default(cuid())
+  consultationId String
+  toProvider     String
+  toSpecialty    String
+  reason         String
+  urgency        String?
+  notes          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  consultation Consultation @relation(fields: [consultationId], references: [id])
+
+  @@map("referrals")
+}
+
+model FhirBundle {
+  id             String   @id @default(cuid())
+  consultationId String   @unique
+  bundleData     Json // Store the complete FHIR bundle as JSON
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  consultation Consultation @relation(fields: [consultationId], references: [id])
+
+  @@map("fhir_bundles")
+}

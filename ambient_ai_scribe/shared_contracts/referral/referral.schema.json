@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Referral",
+  "description": "Medical referral details",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the referral"
+    },
+    "consultationId": {
+      "type": "string",
+      "description": "ID of the consultation this referral belongs to"
+    },
+    "toProvider": {
+      "type": "string",
+      "description": "Name of the referred provider or facility"
+    },
+    "toSpecialty": {
+      "type": "string",
+      "description": "Medical specialty being referred to"
+    },
+    "reason": {
+      "type": "string",
+      "description": "Reason for the referral"
+    },
+    "urgency": {
+      "type": "string",
+      "enum": ["routine", "urgent", "emergency"],
+      "description": "Urgency level of the referral"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes about the referral"
+    }
+  },
+  "required": ["id", "consultationId", "toProvider", "toSpecialty", "reason"],
+  "additionalProperties": false
+}

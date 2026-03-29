@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FHIR Bundle",
+  "description": "FHIR Bundle containing clinical resources",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the FHIR bundle"
+    },
+    "consultationId": {
+      "type": "string",
+      "description": "ID of the consultation this bundle belongs to"
+    },
+    "bundleData": {
+      "type": "object",
+      "description": "Complete FHIR Bundle structure following FHIR R4 specification",
+      "properties": {
+        "resourceType": {
+          "type": "string",
+          "enum": ["Bundle"]
+        },
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["collection", "document", "message", "transaction", "transaction-response", "batch", "batch-response", "history", "searchset"]
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "fullUrl": {
+                "type": "string"
+              },
+              "resource": {
+                "type": "object"
+              },
+              "request": {
+                "type": "object"
+              },
+              "response": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      },
+      "required": ["resourceType", "type"]
+    }
+  },
+  "required": ["id", "consultationId", "bundleData"],
+  "additionalProperties": false
+}

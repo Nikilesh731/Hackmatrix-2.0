@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Transcript Turn",
+  "description": "A single turn in a medical consultation transcript",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the transcript turn"
+    },
+    "consultationId": {
+      "type": "string",
+      "description": "ID of the consultation this turn belongs to"
+    },
+    "speaker": {
+      "type": "string",
+      "enum": ["doctor", "patient"],
+      "description": "Who is speaking in this turn"
+    },
+    "text": {
+      "type": "string",
+      "description": "The spoken text content"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this turn was recorded"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Transcription confidence score (0-1)"
+    }
+  },
+  "required": ["id", "consultationId", "speaker", "text", "timestamp"],
+  "additionalProperties": false
+}

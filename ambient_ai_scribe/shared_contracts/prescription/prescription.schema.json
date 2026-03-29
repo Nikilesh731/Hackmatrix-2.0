@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Prescription",
+  "description": "Medical prescription details",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the prescription"
+    },
+    "consultationId": {
+      "type": "string",
+      "description": "ID of the consultation this prescription belongs to"
+    },
+    "medication": {
+      "type": "string",
+      "description": "Name of the prescribed medication"
+    },
+    "dosage": {
+      "type": "string",
+      "description": "Dosage amount (e.g., '10mg', '500mg')"
+    },
+    "frequency": {
+      "type": "string",
+      "description": "How often to take the medication"
+    },
+    "duration": {
+      "type": "string",
+      "description": "How long to take the medication"
+    },
+    "instructions": {
+      "type": "string",
+      "description": "Additional instructions for taking the medication"
+    }
+  },
+  "required": ["id", "consultationId", "medication", "dosage", "frequency"],
+  "additionalProperties": false
+}

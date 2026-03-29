@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: ambient_ai_scribe_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ambient_ai_scribe
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/prisma/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: ambient_ai_scribe_backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/ambient_ai_scribe?schema=public
+      JWT_SECRET: your-super-secret-jwt-key-change-this-in-production
+      JWT_EXPIRES_IN: 7d
+      PORT: 3000
+      NODE_ENV: development
+      FRONTEND_URL: http://localhost:3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    command: npm run start:dev
+
+  # Uncomment when ready for mobile app development
+  # mobile:
+  #   build:
+  #     context: ./mobile_app
+  #     dockerfile: Dockerfile
+  #   container_name: ambient_ai_scribe_mobile
+  #   restart: unless-stopped
+  #   ports:
+  #     - "8080:8080"
+  #   depends_on:
+  #     - backend
+
+volumes:
+  postgres_data:

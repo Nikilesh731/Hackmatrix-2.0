@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Consultation State",
+  "description": "Current state of a medical consultation",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the consultation"
+    },
+    "userId": {
+      "type": "string",
+      "description": "ID of the doctor conducting the consultation"
+    },
+    "patientId": {
+      "type": "string",
+      "description": "ID of the patient"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["not_started", "in_progress", "paused", "completed", "cancelled"],
+      "description": "Current status of the consultation"
+    },
+    "startTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the consultation started"
+    },
+    "endTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the consultation ended"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the consultation was created"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the consultation was last updated"
+    }
+  },
+  "required": ["id", "userId", "patientId", "status", "createdAt", "updatedAt"],
+  "additionalProperties": false
+}
