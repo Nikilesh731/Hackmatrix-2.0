@@ -1,0 +1,7 @@
+{
+  "name": "ambient-ai-scribe-root",
+  "private": true,
+  "scripts": {
+    "repo:map": "node scripts/generate-repo-map.js"
+  }
+}
